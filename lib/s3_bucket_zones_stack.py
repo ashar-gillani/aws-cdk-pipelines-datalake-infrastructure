@@ -7,7 +7,7 @@ import aws_cdk.aws_kms as kms
 import aws_cdk.aws_s3 as s3
 
 from .configuration import (
-    PROD, S3_ACCESS_LOG_BUCKET, S3_CONFORMED_BUCKET, S3_KMS_KEY, S3_PURPOSE_BUILT_BUCKET, S3_RAW_BUCKET, TEST,
+    S3_ACCESS_LOG_BUCKET, S3_CONFORMED_BUCKET, S3_KMS_KEY, S3_PURPOSE_BUILT_BUCKET, S3_RAW_BUCKET,
     get_environment_configuration, get_logical_id_prefix, get_resource_name_prefix,
 )
 
@@ -36,8 +36,8 @@ class S3BucketZonesStack(cdk.Stack):
         logical_id_prefix = get_logical_id_prefix()
         resource_name_prefix = get_resource_name_prefix()
         self.removal_policy = cdk.RemovalPolicy.DESTROY
-        if (target_environment == PROD or target_environment == TEST):
-            self.removal_policy = cdk.RemovalPolicy.RETAIN
+        # if (target_environment == PROD or target_environment == TEST):
+        #     self.removal_policy = cdk.RemovalPolicy.RETAIN
 
         s3_kms_key = self.create_kms_key(
             deployment_account_id,
@@ -155,20 +155,20 @@ class S3BucketZonesStack(cdk.Stack):
                 noncurrent_version_expiration=cdk.Duration.days(30),
             )
         ]
-        if self.target_environment == PROD:
-            lifecycle_rules = [
-                s3.LifecycleRule(
-                    enabled=True,
-                    expiration=cdk.Duration.days(2555),
-                    noncurrent_version_expiration=cdk.Duration.days(90),
-                    transitions=[
-                        s3.Transition(
-                            storage_class=s3.StorageClass.GLACIER,
-                            transition_after=cdk.Duration.days(365),
-                        )
-                    ]
-                )
-            ]
+        # if self.target_environment == PROD:
+        #     lifecycle_rules = [
+        #         s3.LifecycleRule(
+        #             enabled=True,
+        #             expiration=cdk.Duration.days(2555),
+        #             noncurrent_version_expiration=cdk.Duration.days(90),
+        #             transitions=[
+        #                 s3.Transition(
+        #                     storage_class=s3.StorageClass.GLACIER,
+        #                     transition_after=cdk.Duration.days(365),
+        #                 )
+        #             ]
+        #         )
+        #     ]
         bucket = s3.Bucket(
             self,
             id=logical_id,
@@ -200,19 +200,19 @@ class S3BucketZonesStack(cdk.Stack):
             )
         ]
         # Prevents user deletion of buckets
-        if self.target_environment == PROD or self.target_environment == TEST:
-            policy_document_statements.append(
-                iam.PolicyStatement(
-                    sid='BlockUserDeletionOfBucket',
-                    effect=iam.Effect.DENY,
-                    principals=[iam.AnyPrincipal()],
-                    actions=[
-                        's3:DeleteBucket',
-                    ],
-                    resources=[bucket.bucket_arn],
-                    conditions={'StringLike': {'aws:userId': f'arn:aws:iam::{self.account}:user/*'}}
-                )
-            )
+        # if self.target_environment == PROD or self.target_environment == TEST:
+        #     policy_document_statements.append(
+        #         iam.PolicyStatement(
+        #             sid='BlockUserDeletionOfBucket',
+        #             effect=iam.Effect.DENY,
+        #             principals=[iam.AnyPrincipal()],
+        #             actions=[
+        #                 's3:DeleteBucket',
+        #             ],
+        #             resources=[bucket.bucket_arn],
+        #             conditions={'StringLike': {'aws:userId': f'arn:aws:iam::{self.account}:user/*'}}
+        #         )
+        #     )
         for statement in policy_document_statements:
             bucket.add_to_resource_policy(statement)
 
