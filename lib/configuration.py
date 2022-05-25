@@ -6,8 +6,8 @@ import re
 # Environments (targeted at accounts)
 DEPLOYMENT = 'Deployment'
 DEV = 'Dev'
-TEST = 'Test'
-PROD = 'Prod'
+# TEST = 'Test'
+# PROD = 'Prod'
 
 # The following constants are used to map to parameter/secret paths
 ENVIRONMENT = 'environment'
@@ -54,35 +54,35 @@ def get_local_configuration(environment: str) -> dict:
     """
     local_mapping = {
         DEPLOYMENT: {
-            ACCOUNT_ID: '',
-            REGION: 'us-east-2',
-            GITHUB_REPOSITORY_OWNER_NAME: '',
+            ACCOUNT_ID: '081234251477',
+            REGION: 'us-west-2',
+            GITHUB_REPOSITORY_OWNER_NAME: 'ashar-gillani',
             # If you use GitHub / GitHub Enterprise, this will be the organization name
-            GITHUB_REPOSITORY_NAME: '',
+            GITHUB_REPOSITORY_NAME: 'aws-cdk-pipelines-datalake-infrastructure',
             # Use your forked repo here!
             # This is used in the Logical Id of CloudFormation resources
             # We recommend capital case for consistency. e.g. DataLakeCdkBlog
-            LOGICAL_ID_PREFIX: '',
+            LOGICAL_ID_PREFIX: 'DataLakeCdk',
             # This is used in resources that must be globally unique!
             # It may only contain alphanumeric characters, hyphens, and cannot contain trailing hyphens
             # E.g. unique-identifier-data-lake
-            RESOURCE_NAME_PREFIX: '',
+            RESOURCE_NAME_PREFIX: 'data-lake',
         },
         DEV: {
-            ACCOUNT_ID: '',
-            REGION: 'us-east-2',
-            VPC_CIDR: '10.20.0.0/24'
+            ACCOUNT_ID: '081234251477',
+            REGION: 'us-west-2',
+            VPC_CIDR: '172.31.0.0/16'
         },
-        TEST: {
-            ACCOUNT_ID: '',
-            REGION: 'us-east-2',
-            VPC_CIDR: '10.10.0.0/24'
-        },
-        PROD: {
-            ACCOUNT_ID: '',
-            REGION: 'us-east-2',
-            VPC_CIDR: '10.0.0.0/24'
-        }
+        # TEST: {
+        #     ACCOUNT_ID: '',
+        #     REGION: 'us-west-2',
+        #     VPC_CIDR: '10.10.0.0/24'
+        # },
+        # PROD: {
+        #     ACCOUNT_ID: '',
+        #     REGION: 'us-east-2',
+        #     VPC_CIDR: '10.0.0.0/24'
+        # }
     }
 
     resource_prefix = local_mapping[DEPLOYMENT][RESOURCE_NAME_PREFIX]
@@ -144,8 +144,8 @@ def get_all_configurations() -> dict:
             **get_local_configuration(DEPLOYMENT),
         },
         DEV: get_environment_configuration(DEV),
-        TEST: get_environment_configuration(TEST),
-        PROD: get_environment_configuration(PROD),
+        # TEST: get_environment_configuration(TEST),
+        # PROD: get_environment_configuration(PROD),
     }
 
 
