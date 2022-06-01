@@ -5,7 +5,7 @@ import re
 
 # Environments (targeted at accounts)
 DEPLOYMENT = 'Deployment'
-DEV = 'dev'
+DEV = 'Dev'
 # TEST = 'Test'
 # PROD = 'Prod'
 
