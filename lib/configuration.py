@@ -5,9 +5,10 @@ import re
 
 # Environments (targeted at accounts)
 DEPLOYMENT = 'Deployment'
-DEV = 'dev'
+DEV = 'Dev'
 # TEST = 'Test'
 # PROD = 'Prod'
+
 
 # The following constants are used to map to parameter/secret paths
 ENVIRONMENT = 'environment'
